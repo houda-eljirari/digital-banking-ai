@@ -17,7 +17,6 @@ public class CustomerRestController {
 
     @GetMapping("/customers")
     public List<CustomerDTO> customers() {
-
         return bankAccountService.listCustomers();
     }
 
@@ -30,15 +29,14 @@ public class CustomerRestController {
 
     @PostMapping("/customers")
     public CustomerDTO saveCustomer(@RequestBody CustomerDTO customerDTO) {
-
         return bankAccountService.saveCustomer(customerDTO);
     }
 
     @PutMapping("/customers/{id}")
     public CustomerDTO updateCustomer(
             @PathVariable Long id,
-            @RequestBody CustomerDTO customerDTO
-    ) {
+            @RequestBody CustomerDTO customerDTO)
+            throws CustomerNotFoundException {
 
         customerDTO.setId(id);
 
@@ -46,7 +44,8 @@ public class CustomerRestController {
     }
 
     @DeleteMapping("/customers/{id}")
-    public void deleteCustomer(@PathVariable Long id) {
+    public void deleteCustomer(@PathVariable Long id)
+            throws CustomerNotFoundException {
 
         bankAccountService.deleteCustomer(id);
     }

@@ -9,12 +9,14 @@ public interface BankAccountService {
 
     CustomerDTO saveCustomer(CustomerDTO customerDTO);
 
-    List<CustomerDTO> listCustomers();
+    CustomerDTO updateCustomer(CustomerDTO customerDTO)
+            throws CustomerNotFoundException;
+
+    void deleteCustomer(Long customerId)
+            throws CustomerNotFoundException;
 
     CustomerDTO getCustomer(Long customerId)
             throws CustomerNotFoundException;
 
-    CustomerDTO updateCustomer(CustomerDTO customerDTO);
-
-    void deleteCustomer(Long customerId);
+    List<CustomerDTO> listCustomers();
 }
