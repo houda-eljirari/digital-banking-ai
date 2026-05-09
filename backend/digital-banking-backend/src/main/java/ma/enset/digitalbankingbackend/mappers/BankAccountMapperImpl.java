@@ -8,52 +8,66 @@ import org.springframework.stereotype.Service;
 @Service
 public class BankAccountMapperImpl {
 
-    public CustomerDTO fromCustomer(Customer customer) {
-
+    public CustomerDTO fromCustomer(Customer customer){
         CustomerDTO customerDTO = new CustomerDTO();
 
-        BeanUtils.copyProperties(customer, customerDTO);
+        customerDTO.setId(customer.getId());
+        customerDTO.setName(customer.getName());
+        customerDTO.setEmail(customer.getEmail());
 
         return customerDTO;
     }
 
-    public Customer fromCustomerDTO(CustomerDTO customerDTO) {
-
+    public Customer fromCustomerDTO(CustomerDTO customerDTO){
         Customer customer = new Customer();
 
-        BeanUtils.copyProperties(customerDTO, customer);
+        customer.setId(customerDTO.getId());
+        customer.setName(customerDTO.getName());
+        customer.setEmail(customerDTO.getEmail());
 
         return customer;
     }
 
-    public SavingBankAccountDTO fromSavingBankAccount(SavingAccount savingAccount) {
-
+    public SavingBankAccountDTO fromSavingBankAccount(SavingAccount savingAccount){
         SavingBankAccountDTO dto = new SavingBankAccountDTO();
 
-        BeanUtils.copyProperties(savingAccount, dto);
-
-        dto.setType("Saving Account");
+        dto.setId(savingAccount.getId());
+        dto.setBalance(savingAccount.getBalance());
+        dto.setCreatedAt(savingAccount.getCreatedAt());
+        dto.setStatus(savingAccount.getStatus());
+        dto.setCustomerId(savingAccount.getCustomer().getId());
+        dto.setCustomerName(savingAccount.getCustomer().getName());
+        dto.setInterestRate(savingAccount.getInterestRate());
+        dto.setType(savingAccount.getClass().getSimpleName());
 
         return dto;
     }
 
-    public CurrentBankAccountDTO fromCurrentBankAccount(CurrentAccount currentAccount) {
-
+    public CurrentBankAccountDTO fromCurrentBankAccount(CurrentAccount currentAccount){
         CurrentBankAccountDTO dto = new CurrentBankAccountDTO();
 
-        BeanUtils.copyProperties(currentAccount, dto);
-
-        dto.setType("Current Account");
+        dto.setId(currentAccount.getId());
+        dto.setBalance(currentAccount.getBalance());
+        dto.setCreatedAt(currentAccount.getCreatedAt());
+        dto.setStatus(currentAccount.getStatus());
+        dto.setCustomerId(currentAccount.getCustomer().getId());
+        dto.setCustomerName(currentAccount.getCustomer().getName());
+        dto.setOverDraft(currentAccount.getOverDraft());
+        dto.setType(currentAccount.getClass().getSimpleName());
 
         return dto;
     }
 
-    public AccountOperationDTO fromAccountOperation(AccountOperation accountOperation) {
-
+    public AccountOperationDTO fromAccountOperation(AccountOperation operation){
         AccountOperationDTO dto = new AccountOperationDTO();
 
-        BeanUtils.copyProperties(accountOperation, dto);
+        dto.setId(operation.getId());
+        dto.setOperationDate(operation.getOperationDate());
+        dto.setAmount(operation.getAmount());
+        dto.setType(operation.getType());
+        dto.setDescription(operation.getDescription());
 
         return dto;
     }
+
 }

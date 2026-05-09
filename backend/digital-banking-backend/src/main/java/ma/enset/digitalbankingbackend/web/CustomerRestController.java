@@ -29,24 +29,25 @@ public class CustomerRestController {
 
     @PostMapping("/customers")
     public CustomerDTO saveCustomer(@RequestBody CustomerDTO customerDTO) {
+
         return bankAccountService.saveCustomer(customerDTO);
     }
 
     @PutMapping("/customers/{id}")
     public CustomerDTO updateCustomer(
-            @PathVariable Long id,
+            @PathVariable(name = "id") Long customerId,
             @RequestBody CustomerDTO customerDTO)
             throws CustomerNotFoundException {
 
-        customerDTO.setId(id);
+        customerDTO.setId(customerId);
 
         return bankAccountService.updateCustomer(customerDTO);
     }
 
     @DeleteMapping("/customers/{id}")
-    public void deleteCustomer(@PathVariable Long id)
+    public void deleteCustomer(@PathVariable(name = "id") Long customerId)
             throws CustomerNotFoundException {
 
-        bankAccountService.deleteCustomer(id);
+        bankAccountService.deleteCustomer(customerId);
     }
 }
