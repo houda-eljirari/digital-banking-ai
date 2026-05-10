@@ -18,6 +18,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -290,5 +292,19 @@ public class BankAccountServiceImpl implements BankAccountService {
         );
 
         return accountHistoryDTO;
+    }
+    @Override
+    public Page<CustomerDTO> searchCustomers(
+            String keyword,
+            int page,
+            int size) {
+
+        Page<Customer> customers =
+                customerRepository.findByNameContains(
+                        keyword,
+                        PageRequest.of(page, size)
+                );
+
+        return customers.map(mapper::fromCustomer);
     }
 }

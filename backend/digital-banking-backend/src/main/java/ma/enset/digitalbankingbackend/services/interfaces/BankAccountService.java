@@ -4,6 +4,7 @@ import ma.enset.digitalbankingbackend.dtos.*;
 import ma.enset.digitalbankingbackend.exceptions.BalanceNotSufficientException;
 import ma.enset.digitalbankingbackend.exceptions.BankAccountNotFoundException;
 import ma.enset.digitalbankingbackend.exceptions.CustomerNotFoundException;
+import org.springframework.data.domain.Page;
 
 import java.util.List;
 
@@ -65,4 +66,5 @@ public interface BankAccountService {
             int page,
             int size
     ) throws BankAccountNotFoundException;
+    Page<CustomerDTO> searchCustomers(String keyword, int page, int size);
 }

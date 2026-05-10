@@ -1,11 +1,15 @@
 package ma.enset.digitalbankingbackend.repositories;
 
 import ma.enset.digitalbankingbackend.entities.Customer;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.util.List;
+public interface CustomerRepository
+        extends JpaRepository<Customer, Long> {
 
-public interface CustomerRepository extends JpaRepository<Customer, Long> {
-
-    List<Customer> findByNameContains(String keyword);
+    Page<Customer> findByNameContains(
+            String keyword,
+            Pageable pageable
+    );
 }
