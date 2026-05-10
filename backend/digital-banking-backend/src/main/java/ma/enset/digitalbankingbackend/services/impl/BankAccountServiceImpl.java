@@ -16,7 +16,8 @@ import ma.enset.digitalbankingbackend.repositories.CustomerRepository;
 import ma.enset.digitalbankingbackend.services.interfaces.BankAccountService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -253,6 +254,41 @@ public class BankAccountServiceImpl implements BankAccountService {
             int size)
             throws BankAccountNotFoundException {
 
-        return null;
+        BankAccount bankAccount = bankAccountRepository.findById(accountId)
+                .orElseThrow(() ->
+                        new BankAccountNotFoundException("Bank account not found"));
+
+        Page<AccountOperation> accountOperations =
+                accountOperationRepository.findByBankAccountId(
+                        accountId,
+                        PageRequest.of(page, size)
+                );
+
+        AccountHistoryDTO accountHistoryDTO =
+                new AccountHistoryDTO();
+
+        accountHistoryDTO.setAccountId(bankAccount.getId());
+
+        accountHistoryDTO.setBalance(bankAccount.getBalance());
+
+        accountHistoryDTO.setCurrentPage(page);
+
+        accountHistoryDTO.setPageSize(size);
+
+        accountHistoryDTO.setTotalPages(
+                accountOperations.getTotalPages()
+        );
+
+        List<AccountOperationDTO> accountOperationDTOS =
+                accountOperations.getContent()
+                        .stream()
+                        .map(mapper::fromAccountOperation)
+                        .collect(Collectors.toList());
+
+        accountHistoryDTO.setAccountOperations(
+                accountOperationDTOS
+        );
+
+        return accountHistoryDTO;
     }
 }
