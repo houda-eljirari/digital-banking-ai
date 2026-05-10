@@ -246,4 +246,13 @@ public class BankAccountServiceImpl implements BankAccountService {
                 .map(mapper::fromAccountOperation)
                 .collect(Collectors.toList());
     }
+    @Override
+    public AccountHistoryDTO getAccountHistory(
+            String accountId,
+            int page,
+            int size)
+            throws BankAccountNotFoundException {
+
+        return null;
+    }
 }
