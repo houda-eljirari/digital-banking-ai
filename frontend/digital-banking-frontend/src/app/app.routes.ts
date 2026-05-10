@@ -21,4 +21,8 @@ export const routes: Routes = [
     pathMatch : "full"
   }
 
+  {
+    path : "accounts/:customerId",
+    component : Accounts
+  }
 ];

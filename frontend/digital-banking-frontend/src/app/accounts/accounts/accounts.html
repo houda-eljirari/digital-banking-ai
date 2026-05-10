@@ -1,1 +1,49 @@
-<p>accounts works!</p>
+<div class="container mt-3">
+
+  <div class="card">
+
+    <div class="card-header">
+      Customer Accounts
+    </div>
+
+    <div class="card-body">
+
+      <table class="table">
+
+        <thead>
+
+        <tr>
+          <th>ID</th>
+          <th>Balance</th>
+          <th>Status</th>
+          <th>Created At</th>
+          <th>Type</th>
+        </tr>
+
+        </thead>
+
+        <tbody>
+
+        <tr *ngFor="let account of accounts">
+
+          <td>{{account.id}}</td>
+
+          <td>{{account.balance}}</td>
+
+          <td>{{account.status}}</td>
+
+          <td>{{account.createdAt}}</td>
+
+          <td>{{account.type}}</td>
+
+        </tr>
+
+        </tbody>
+
+      </table>
+
+    </div>
+
+  </div>
+
+</div>

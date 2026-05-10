@@ -8,6 +8,9 @@ import { Customer } from '../../models/customer.model';
 
 import { CustomerService } from '../../services/customer';
 
+import { RouterModule } from '@angular/router';
+
+imports: [CommonModule, FormsModule, RouterModule],
 @Component({
   selector: 'app-customers',
 
