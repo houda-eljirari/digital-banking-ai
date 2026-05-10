@@ -34,4 +34,12 @@ export class CustomerService {
 
   }
 
+  public deleteCustomer(id : number){
+
+    return this.http.delete(
+      this.backendHost + "/api/customers/" + id
+    );
+
+  }
+
 }

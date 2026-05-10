@@ -34,6 +34,7 @@
         <th>ID</th>
         <th>Name</th>
         <th>Email</th>
+        <th>Action</th>
 
       </tr>
 
@@ -44,8 +45,21 @@
       <tr *ngFor="let c of customers">
 
         <td>{{c.id}}</td>
+
         <td>{{c.name}}</td>
+
         <td>{{c.email}}</td>
+
+        <td>
+
+          <button class="btn btn-danger"
+                  (click)="handleDeleteCustomer(c)">
+
+            Delete
+
+          </button>
+
+        </td>
 
       </tr>
 

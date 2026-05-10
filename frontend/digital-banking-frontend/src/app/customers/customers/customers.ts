@@ -57,5 +57,29 @@ export class Customers implements OnInit {
       });
 
   }
+handleDeleteCustomer(c : Customer) {
 
+  let conf = confirm("Are you sure?");
+
+  if(!conf) return;
+
+  this.customerService.deleteCustomer(c.id)
+    .subscribe({
+
+      next : () => {
+
+        this.customers =
+          this.customers.filter(data => data.id != c.id);
+
+      },
+
+      error : (err) => {
+
+        console.log(err);
+
+      }
+
+    });
+
+}
 }
