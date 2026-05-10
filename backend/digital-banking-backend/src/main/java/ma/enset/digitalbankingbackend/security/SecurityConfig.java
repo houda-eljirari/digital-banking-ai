@@ -1,5 +1,6 @@
 package ma.enset.digitalbankingbackend.security;
 
+import ma.enset.digitalbankingbackend.security.jwt.JwtAuthorizationFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -7,6 +8,7 @@ import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 public class SecurityConfig {
@@ -34,8 +36,11 @@ public class SecurityConfig {
                         headers.frameOptions(frame -> frame.disable())
                 )
 
-                .httpBasic(Customizer.withDefaults());
-
+                .httpBasic(httpBasic -> httpBasic.disable());
+                http.addFilterBefore(
+                        new JwtAuthorizationFilter(),
+                        UsernamePasswordAuthenticationFilter.class
+                );
         return http.build();
     }
     @Bean
