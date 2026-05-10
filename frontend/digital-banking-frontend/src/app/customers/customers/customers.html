@@ -1,0 +1,58 @@
+<div class="card">
+
+  <div class="card-header">
+
+    <div class="input-group">
+
+      <label class="input-group-text">
+        Keyword :
+      </label>
+
+      <input type="text"
+             [(ngModel)]="keyword"
+             class="form-control">
+
+      <button class="btn btn-info"
+              (click)="handleSearchCustomers()">
+
+        Search
+
+      </button>
+
+    </div>
+
+  </div>
+
+  <div class="card-body">
+
+    <table class="table">
+
+      <thead>
+
+      <tr>
+
+        <th>ID</th>
+        <th>Name</th>
+        <th>Email</th>
+
+      </tr>
+
+      </thead>
+
+      <tbody>
+
+      <tr *ngFor="let c of customers">
+
+        <td>{{c.id}}</td>
+        <td>{{c.name}}</td>
+        <td>{{c.email}}</td>
+
+      </tr>
+
+      </tbody>
+
+    </table>
+
+  </div>
+
+</div>
