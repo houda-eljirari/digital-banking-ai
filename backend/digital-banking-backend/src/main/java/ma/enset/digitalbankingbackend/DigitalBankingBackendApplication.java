@@ -1,17 +1,19 @@
 package ma.enset.digitalbankingbackend;
 
-import ma.enset.digitalbankingbackend.entities.*;
-import ma.enset.digitalbankingbackend.enums.AccountStatus;
-import ma.enset.digitalbankingbackend.enums.OperationType;
-import ma.enset.digitalbankingbackend.repositories.AccountOperationRepository;
-import ma.enset.digitalbankingbackend.repositories.BankAccountRepository;
-import ma.enset.digitalbankingbackend.repositories.CustomerRepository;
+import ma.enset.digitalbankingbackend.dtos.BankAccountDTO;
+import ma.enset.digitalbankingbackend.dtos.CurrentBankAccountDTO;
+import ma.enset.digitalbankingbackend.dtos.CustomerDTO;
+import ma.enset.digitalbankingbackend.dtos.SavingBankAccountDTO;
+import ma.enset.digitalbankingbackend.exceptions.BalanceNotSufficientException;
+import ma.enset.digitalbankingbackend.exceptions.BankAccountNotFoundException;
+import ma.enset.digitalbankingbackend.exceptions.CustomerNotFoundException;
+import ma.enset.digitalbankingbackend.services.interfaces.BankAccountService;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
-import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 import java.util.stream.Stream;
 
@@ -23,60 +25,70 @@ public class DigitalBankingBackendApplication {
     }
 
     @Bean
-    CommandLineRunner commandLineRunner(
-            CustomerRepository customerRepository,
-            BankAccountRepository bankAccountRepository,
-            AccountOperationRepository operationRepository
-    ) {
+    CommandLineRunner commandLineRunner(BankAccountService bankAccountService) {
         return args -> {
 
-            Stream.of("Houda", "Mohamed", "Sara").forEach(name -> {
-                Customer customer = Customer.builder()
-                        .name(name)
-                        .email(name + "@gmail.com")
-                        .build();
+            Stream.of("Houda", "Yassine", "Imane")
+                    .forEach(name -> {
 
-                customerRepository.save(customer);
+                        CustomerDTO customer = new CustomerDTO();
+
+                        customer.setName(name);
+
+                        customer.setEmail(name + "@gmail.com");
+
+                        bankAccountService.saveCustomer(customer);
+                    });
+
+            bankAccountService.listCustomers().forEach(customer -> {
+
+                try {
+
+                    bankAccountService.saveCurrentBankAccount(
+                            Math.random() * 90000,
+                            9000,
+                            customer.getId()
+                    );
+
+                    bankAccountService.saveSavingBankAccount(
+                            Math.random() * 120000,
+                            5.5,
+                            customer.getId()
+                    );
+
+                } catch (CustomerNotFoundException e) {
+                    e.printStackTrace();
+                }
             });
 
-            customerRepository.findAll().forEach(customer -> {
+            List<BankAccountDTO> bankAccounts =
+                    bankAccountService.bankAccountList();
 
-                CurrentAccount currentAccount = new CurrentAccount();
-                currentAccount.setId(UUID.randomUUID().toString());
-                currentAccount.setBalance(Math.random() * 90000);
-                currentAccount.setCreatedAt(new Date());
-                currentAccount.setStatus(AccountStatus.CREATED);
-                currentAccount.setCustomer(customer);
-                currentAccount.setOverDraft(9000);
-
-                bankAccountRepository.save(currentAccount);
-
-                SavingAccount savingAccount = new SavingAccount();
-                savingAccount.setId(UUID.randomUUID().toString());
-                savingAccount.setBalance(Math.random() * 120000);
-                savingAccount.setCreatedAt(new Date());
-                savingAccount.setStatus(AccountStatus.CREATED);
-                savingAccount.setCustomer(customer);
-                savingAccount.setInterestRate(5.5);
-
-                bankAccountRepository.save(savingAccount);
-            });
-
-            bankAccountRepository.findAll().forEach(account -> {
+            for (BankAccountDTO bankAccount : bankAccounts) {
 
                 for (int i = 0; i < 10; i++) {
 
-                    AccountOperation operation = AccountOperation.builder()
-                            .operationDate(new Date())
-                            .amount(Math.random() * 12000)
-                            .type(Math.random() > 0.5 ? OperationType.DEBIT : OperationType.CREDIT)
-                            .bankAccount(account)
-                            .description("Operation")
-                            .build();
+                    try {
 
-                    operationRepository.save(operation);
+                        bankAccountService.credit(
+                                bankAccount.getId(),
+                                10000 + Math.random() * 120000,
+                                "Credit"
+                        );
+
+                        bankAccountService.debit(
+                                bankAccount.getId(),
+                                1000 + Math.random() * 9000,
+                                "Debit"
+                        );
+
+                    } catch (BankAccountNotFoundException |
+                             BalanceNotSufficientException e) {
+
+                        e.printStackTrace();
+                    }
                 }
-            });
+            }
         };
     }
 }
