@@ -24,5 +24,15 @@ export class AccountsService {
     );
 
   }
+  getAccountHistory(
+    accountId : string,
+    page : number,
+    size : number
+  ){
 
+    return this.http.get<any>(
+      `${this.host}/accounts/${accountId}/pageOperations?page=${page}&size=${size}`
+    );
+
+  }
 }

@@ -10,16 +10,13 @@ import { CustomerService } from '../../services/customer';
 
 import { RouterModule } from '@angular/router';
 
-imports: [CommonModule, FormsModule, RouterModule],
+
 @Component({
   selector: 'app-customers',
 
   standalone: true,
 
-  imports: [
-    CommonModule,
-    FormsModule
-  ],
+  imports: [CommonModule, FormsModule, RouterModule],
 
   templateUrl: './customers.html',
 
